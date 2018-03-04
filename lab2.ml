@@ -366,7 +366,8 @@ For example:
 ......................................................................*)
 
 let ids (enrollments: enrollment list) : int list =
-  failwith "ids not implemented" ;;
+  List.sort_uniq (compare)
+                 (List.map (fun student -> student.id) enrollments) ;;
   
 (*......................................................................
 Exercise 18: Define a function called verify that determines whether all
@@ -379,4 +380,12 @@ For example:
 ......................................................................*)
 
 let verify (enrollments : enrollment list) : bool =
-  failwith "verify not implemented" ;;
+  let names (enrollments : enrollment list) : string list =
+    List.sort_uniq (compare)
+                   (List.map (fun studentrec -> studentrec.name) enrollments) in
+    List.for_all (fun l -> (List.length l) = 1)
+                 (List.map
+                   (fun student -> names (transcript enrollments student))
+                   (ids enrollments)) ;;
+
+
